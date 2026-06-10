@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Productos{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Inventario de Productos</h1>
+  <a href="{{ url_for('nuevo_producto') }}" class="btn btn-primary">+ Nuevo producto</a>
+</div>
+
+<div class="audit-banner">
+  ⚠ <strong>Falla TGS – Entropía:</strong> Esta tabla muestra <strong>todos</strong> los registros sin paginación,
+  filtros por categoría ni cálculo de días restantes de stock. A mayor volumen de datos, mayor saturación cognitiva.
+</div>
+
+<div class="table-wrapper">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Nombre</th>
+        <th>Categoría</th>
+        <th>Precio unitario</th>
+        <th>Stock actual</th>
+        <th>Días stock proyectados</th>
+        <th>Fecha ingreso</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in productos %}
+      <tr class="{% if p.stock_actual < 10 %}row-danger{% elif p.stock_actual < 25 %}row-warning{% endif %}">
+        <td>{{ p.id_producto }}</td>
+        <td><strong>{{ p.nombre }}</strong><br/><small class="muted">{{ p.descripcion }}</small></td>
+        <td><span class="badge">{{ p.categoria or '—' }}</span></td>
+        <td class="text-right">Bs. {{ "%.2f"|format(p.precio_unitario) }}</td>
+        <td class="text-right {% if p.stock_actual < 10 %}text-danger{% elif p.stock_actual < 25 %}text-warning{% endif %}">
+          {{ p.stock_actual }}
+        </td>
+        <td class="text-center text-muted">
+          <span class="not-available">❌ No calculado</span>
+        </td>
+        <td>{{ p.fecha_ingreso or '—' }}</td>
+        <td class="actions">
+          <a href="{{ url_for('editar_producto', id=p.id_producto) }}" class="btn-sm btn-edit">Editar</a>
+          <a href="{{ url_for('eliminar_producto', id=p.id_producto) }}"
+             class="btn-sm btn-delete"
+             onclick="return confirm('¿Eliminar este producto?')">Eliminar</a>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="8" class="text-center muted">No hay productos registrados.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="table-footer-note">
+  Total de registros: <strong>{{ productos|length }}</strong> ·
+  <span class="text-danger">Rojo = stock &lt; 10</span> ·
+  <span class="text-warning">Amarillo = stock &lt; 25</span> ·
+  Sin paginación ni proyección de agotamiento.
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Eco-Distribuidora S.A. – {% block title %}Sistema CRUD{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">
+      <span class="nav-logo">📦</span>
+      <span>Eco-Distribuidora S.A.</span>
+      <span class="nav-tag">Sistema Legacy v1.0</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('index') }}" {% if request.endpoint == 'index' %}class="active"{% endif %}>Inicio</a></li>
+      <li><a href="{{ url_for('productos') }}" {% if 'producto' in request.endpoint %}class="active"{% endif %}>Productos</a></li>
+      <li><a href="{{ url_for('ventas') }}" {% if 'venta' in request.endpoint %}class="active"{% endif %}>Ventas</a></li>
+    </ul>
+  </nav>
+
+  <main class="main-content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <p>Eco-Distribuidora S.A. &copy; 2024 · Sistema CRUD Legacy · 
+       <span class="footer-audit">⚠ Auditado: Ver <a href="https://github.com/tu-squad/eco-distribuidora/blob/main/docs/INFORME_AUDITORIA.md">Informe de Auditoría</a></span>
+    </p>
+  </footer>
+</body>
+</html>

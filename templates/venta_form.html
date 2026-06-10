@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Nueva Venta{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Registrar Nueva Venta</h1>
+  <a href="{{ url_for('ventas') }}" class="btn btn-secondary">← Volver</a>
+</div>
+
+<div class="audit-banner">
+  ⚠ <strong>Falla de diseño:</strong> El campo "Cliente" es texto libre — no existe una entidad
+  Cliente en la base de datos. El stock <strong>no se actualiza</strong> al registrar una venta.
+</div>
+
+<div class="form-card">
+  <form method="POST">
+    <div class="form-group">
+      <label for="id_producto">Producto *</label>
+      <select id="id_producto" name="id_producto" required>
+        <option value="">-- Seleccionar producto --</option>
+        {% for p in productos %}
+        <option value="{{ p.id_producto }}">{{ p.nombre }} (Stock: {{ p.stock_actual }}) — Bs. {{ "%.2f"|format(p.precio_unitario) }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="nombre_cliente">Nombre del cliente *</label>
+      <input type="text" id="nombre_cliente" name="nombre_cliente" required
+             placeholder="Ej: Juan García"/>
+      <small class="field-note">⚠ Campo de texto libre. No vinculado a ningún registro de cliente.</small>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="cantidad">Cantidad *</label>
+        <input type="number" id="cantidad" name="cantidad" min="1" required value="1"/>
+      </div>
+      <div class="form-group">
+        <label for="vendedor">Vendedor</label>
+        <input type="text" id="vendedor" name="vendedor" placeholder="Nombre del vendedor"/>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Registrar venta</button>
+      <a href="{{ url_for('ventas') }}" class="btn btn-secondary">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

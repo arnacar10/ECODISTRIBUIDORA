@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Ventas{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Registro de Ventas</h1>
+  <a href="{{ url_for('nueva_venta') }}" class="btn btn-primary">+ Nueva venta</a>
+</div>
+
+<div class="audit-banner">
+  ⚠ <strong>Falla TGS – Falta de Sinergia:</strong> Las ventas se listan en orden cronológico inverso sin
+  agrupación por cliente, producto ni período. No existen subtotales, tendencias ni alertas de clientes inactivos.
+  El nombre del cliente es texto libre — puede estar duplicado con variantes ortográficas.
+</div>
+
+<div class="table-wrapper">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Fecha</th>
+        <th>Cliente</th>
+        <th>Producto</th>
+        <th>Cantidad</th>
+        <th>Total</th>
+        <th>Vendedor</th>
+        <th>Frecuencia cliente</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for v in ventas %}
+      <tr>
+        <td>{{ v.id_venta }}</td>
+        <td>{{ v.fecha_venta or '—' }}</td>
+        <td>{{ v.nombre_cliente or '—' }}</td>
+        <td>{{ v.nombre_producto or '(producto eliminado)' }}</td>
+        <td class="text-right">{{ v.cantidad }}</td>
+        <td class="text-right">Bs. {{ "%.2f"|format(v.total_venta or 0) }}</td>
+        <td>{{ v.vendedor or '—' }}</td>
+        <td class="text-center text-muted">
+          <span class="not-available">❌ Sin entidad Cliente</span>
+        </td>
+        <td class="actions">
+          <a href="{{ url_for('eliminar_venta', id=v.id_venta) }}"
+             class="btn-sm btn-delete"
+             onclick="return confirm('¿Eliminar esta venta?')">Eliminar</a>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="9" class="text-center muted">No hay ventas registradas.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="table-footer-note">
+  Total de registros: <strong>{{ ventas|length }}</strong> ·
+  Sin paginación · Sin totales por período · Sin análisis de cliente
+</div>
+{% endblock %}

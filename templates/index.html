@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Panel de Control</h1>
+  <p class="page-subtitle">Vista general del sistema de inventario</p>
+</div>
+
+<div class="audit-banner">
+  ⚠ <strong>Nota de Auditoría:</strong> Este sistema solo muestra conteos planos.
+  No calcula tendencias, alertas de stock ni frecuencia de clientes.
+  Consultar el <a href="docs/INFORME_AUDITORIA.md">Informe de Auditoría</a> para el análisis completo.
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-number">{{ total_productos }}</div>
+    <div class="stat-label">Productos registrados</div>
+    <div class="stat-note">Sin análisis de rotación</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">{{ total_ventas }}</div>
+    <div class="stat-label">Ventas totales</div>
+    <div class="stat-note">Sin tendencias ni períodos</div>
+  </div>
+  <div class="stat-card stat-missing">
+    <div class="stat-number">—</div>
+    <div class="stat-label">Días de stock proyectados</div>
+    <div class="stat-note">❌ No disponible en este sistema</div>
+  </div>
+  <div class="stat-card stat-missing">
+    <div class="stat-number">—</div>
+    <div class="stat-label">Clientes activos</div>
+    <div class="stat-note">❌ No existe entidad Cliente</div>
+  </div>
+</div>
+
+<div class="quick-actions">
+  <h2>Acciones rápidas</h2>
+  <div class="action-buttons">
+    <a href="{{ url_for('productos') }}" class="btn btn-primary">Ver todos los productos</a>
+    <a href="{{ url_for('ventas') }}" class="btn btn-primary">Ver todas las ventas</a>
+    <a href="{{ url_for('nuevo_producto') }}" class="btn btn-secondary">+ Nuevo producto</a>
+    <a href="{{ url_for('nueva_venta') }}" class="btn btn-secondary">+ Nueva venta</a>
+  </div>
+</div>
+{% endblock %}
